@@ -8,7 +8,7 @@
 #include "defs/hwdefs.h"
 #include "sensors/sensors.h"
 
-#include <Arduino.h>
+
 
 SoftwareSerial monSerial = SoftwareSerial(MON_RX, MON_TX);
 String monName = MON_NAME;

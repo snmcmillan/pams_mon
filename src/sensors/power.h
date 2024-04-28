@@ -3,13 +3,11 @@
 
 #include "../defs/hwdefs.h"
 #include <math.h>
+#include <Arduino.h>
 
-float inputPower = 0;
-float outputPower = 0;
-float reflectedPower = 0;
-
-//We also need to track VSWR, as this is sent to the head unit.
-float VSWR = 0;
+float inputPower = 0, outputPower = 0, reflectedPower = 0, //Actual Powers, in dBm
+        inputPowerReading = 0, outputPowerReading = 0, reflectedPowerReading = 0, //Analog Pin Readings
+        VSWR = 0;   //We also need to track VSWR, as this is sent to the head unit.
 
 /**
  * Input Power Status Code
@@ -46,6 +44,12 @@ float dBm2mW(float dBm){
 */
 float vswr(float forward, float reflected){
     return (1 + sqrt(reflected / forward)) / (1 - sqrt(reflected / forward));
+}
+
+void readPowerDetectors(){
+    inputPowerReading = analogRead(INPUT_PD);
+    outputPowerReading = analogRead(FORWARD_PD);
+    reflectedPowerReading = analogRead(REFLECTED_PD);
 }
 
 #endif

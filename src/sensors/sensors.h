@@ -12,20 +12,6 @@
 
 #include<HardwareSerial.h>
 
-//These are the sensor data readings.
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**
  * Overdrive Switch State
  * 
@@ -45,6 +31,9 @@ void readSensors(){
         outputPower = (float) (rand()%1000) / 100;
         reflectedPower = (float) (rand()%1000) / 100;
     #else
+        readTemperature();
+        readCurrent();
+        readPowerDetectors();
     #endif 
     #if DEBUG == 1
         Serial.println(temperature);
@@ -55,11 +44,8 @@ void readSensors(){
     #endif
 }
 
-
-
-
-
-
-
+void setStates(){
+    setThermalState();
+}
 
 #endif
