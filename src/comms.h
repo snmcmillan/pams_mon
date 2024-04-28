@@ -6,7 +6,7 @@
 #include <HardwareSerial.h>
 #include "defs/swdefs.h"
 #include "defs/hwdefs.h"
-#include "sensors.h"
+#include "sensors/sensors.h"
 
 #include <Arduino.h>
 
@@ -20,7 +20,7 @@ String monName = MON_NAME;
  * Once any data is read, execution continues.
 */
 void waitForHead(){
-  while(monSerial.peek() == -1){}
+    while(monSerial.peek() == -1){}
 }
 
 /**
@@ -30,14 +30,14 @@ void waitForHead(){
  * Once the code is read, it is also discarded.
 */
 void waitForHead(int code){
-  while(monSerial.read() != code){}
+    while(monSerial.read() != code){}
 }
 
 /**
  * acknowledgeHead: Sends a supplied status code to the head unit.
 */
 void acknowledgeHead(int code){
-  monSerial.write(code);
+    monSerial.write(code);
 }
 
 void initMon(){
@@ -53,29 +53,26 @@ void initMon(){
     monSerial.flush();
     #if DEBUG == 1
         Serial.println("Initial Handshake Performed!");
+        delay(1000);
     #endif
 }
 
 void sendReadings(){
-  waitForHead(23);
-  #if DEBUG == 1
-    Serial.println("Head Unit Wants Data!");
-  #endif
-  monSerial.print(temperature);
-  monSerial.print(current);
-  monSerial.print(signalPower);
-  monSerial.print(forwardPower);
-  monSerial.print(reflectedPower);
-  monSerial.print(temperatureState);
-  monSerial.print(currentState);
-  monSerial.print(signalPowerState);
-  monSerial.print(forwardPowerState);
-  monSerial.print(reflectedPowerState);
+    waitForHead(23);
+    #if DEBUG == 1
+        Serial.println("Head Unit Wants Data!");
+    #endif
+    monSerial.print(temperature);
+    monSerial.print(current);
+    monSerial.print(inputPower);
+    monSerial.print(outputPower);
+    monSerial.print(VSWR);
 
-  #if DEBUG == 1
-    Serial.println("Head Unit Read Data!");
-  #endif
-  monSerial.flush();
+    #if DEBUG == 1
+        Serial.println("Head Unit Read Data!");
+        delay(1000);
+    #endif
+    monSerial.flush();
 }
 
 #endif

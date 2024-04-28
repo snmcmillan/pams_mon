@@ -100,10 +100,13 @@
  * TEMP_DELTA_MAX  : If our change in temperature (in degrees Celsius/minute) exceeds this,
  *                   we will shut down the PA.
 */
-#define TEMP_UPPER_SOFT 80 //Degrees Celsius
-#define TEMP_UPPER_HARD 90 //Degrees Celsius
+#define TEMP_UPPER_SOFT 70 //Degrees Celsius
+#define TEMP_UPPER_HARD 80 //Degrees Celsius
 #define TEMP_TIME_LIMIT 5 //Minutes
-#define TEMP_DELTA_MAX 5 //Degrees Celsius Per Minute
+#define TEMP_DELTA_MAX 1 //Degrees Celsius Per Minute
+
+
+#define VSWR_MAX 2.0
 
 
 #endif
