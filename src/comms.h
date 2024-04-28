@@ -11,6 +11,7 @@
 #include <Arduino.h>
 
 SoftwareSerial monSerial = SoftwareSerial(MON_RX, MON_TX);
+String monName = MON_NAME;
 
 /**
  * waitForHead: Waits for any data to be sent from the head unit.
@@ -37,6 +38,22 @@ void waitForHead(int code){
 */
 void acknowledgeHead(int code){
   monSerial.write(code);
+}
+
+void initMon(){
+    monSerial.begin(BAUD_RATE);
+    monSerial.flush();
+    waitForHead(10);
+    #if DEBUG == 1
+        Serial.begin(9600);
+        Serial.println("Head Unit Wants Data!");
+    #endif
+    monSerial.println(monName);
+    waitForHead(20);
+    monSerial.flush();
+    #if DEBUG == 1
+        Serial.println("Initial Handshake Performed!");
+    #endif
 }
 
 void sendReadings(){
