@@ -6,13 +6,15 @@
   #include <time.h>
 #endif
 void setup() {
+  digitalWrite(OVERDRIVE_P2, LOW);
   initSensors();
   initMon();
-
 }
 
 void loop() {
   readSensors();
-  sendReadings();
+  setStates();
+  setOverdrive();
+  sendData();
 }
 

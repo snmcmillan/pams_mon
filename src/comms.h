@@ -57,7 +57,7 @@ void initMon(){
     #endif
 }
 
-void sendReadings(){
+void sendData(){
     waitForHead(23);
     #if DEBUG == 1
         Serial.println("Head Unit Wants Data!");
@@ -67,6 +67,9 @@ void sendReadings(){
     monSerial.print(inputPower);
     monSerial.print(outputPower);
     monSerial.print(VSWR);
+    monSerial.print(thermalState);
+    monSerial.print(inputState);
+    monSerial.print(vswrState);
 
     #if DEBUG == 1
         Serial.println("Head Unit Read Data!");

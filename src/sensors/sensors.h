@@ -29,7 +29,8 @@ void readSensors(){
         current = (float) (rand()%1000) / 100;
         inputPower = (float) (rand()%1000) / 100;
         outputPower = (float) (rand()%1000) / 100;
-        reflectedPower = (float) (rand()%1000) / 100;
+        reflectedPower = (float) (rand()%1000) / 100 - outputPower;
+        VSWR = vswr(dBm2mW(outputPower), dBm2mW(reflectedPower));
     #else
         readTemperature();
         readCurrent();
@@ -41,11 +42,24 @@ void readSensors(){
         Serial.println(inputPower);
         Serial.println(outputPower);
         Serial.println(reflectedPower);
+        Serial.println(VSWR);
+        delay(2000);
     #endif
 }
 
 void setStates(){
     setThermalState();
+    setPowerStates();
+}
+
+void setOverdrive(){
+    if(thermalState > 1 || inputState || vswrState)
+        overdriveState = true;
+    else overdriveState = false;
+
+    if(overdriveState)
+        digitalWrite(OVERDRIVE_P1, HIGH);
+    else digitalWrite(OVERDRIVE_P1, LOW);
 }
 
 #endif

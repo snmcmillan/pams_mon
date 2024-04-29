@@ -5,14 +5,13 @@
 
 #include <Arduino.h>
 
-float current = 0, currentSenseReading = 0;
+float current = 0;
 
-float calculateCurrent(){
-    return CURRENT_SENSE_LIMIT * (currentSenseReading / 4.0);
+float calculateCurrent(float reading){
+    return CURRENT_SENSE_LIMIT * (reading / 4.0);
 }
 
 void readCurrent(){
-    currentSenseReading = analogRead(CURRENT_SENSE);
-    current = calculateCurrent();
+    current = calculateCurrent(analogRead(CURRENT_SENSE));
 }
 #endif

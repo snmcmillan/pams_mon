@@ -106,6 +106,8 @@
 #define TEMP_DELTA_MAX 1 //Degrees Celsius Per Minute
 
 
+#define INPUT_PWR_MAX 10 //dBm
+
 #define VSWR_MAX 2.0
 
 

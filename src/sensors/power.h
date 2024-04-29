@@ -5,8 +5,7 @@
 #include <math.h>
 #include <Arduino.h>
 
-float inputPower = 0, outputPower = 0, reflectedPower = 0, //Actual Powers, in dBm
-        inputPowerReading = 0, outputPowerReading = 0, reflectedPowerReading = 0, //Analog Pin Readings
+float inputPower = 0, outputPower = 0, reflectedPower = 0,
         VSWR = 0;   //We also need to track VSWR, as this is sent to the head unit.
 
 /**
@@ -32,7 +31,7 @@ bool vswrState = false;
  * 
 */
 float dBm2mW(float dBm){
-    return pow(10, (dBm / 10));
+    return pow(10, (dBm / 10.0));
 }
 
 /**
@@ -46,10 +45,30 @@ float vswr(float forward, float reflected){
     return (1 + sqrt(reflected / forward)) / (1 - sqrt(reflected / forward));
 }
 
+float adl5519_to_dBm(float reading){
+    return (reading / (-0.0215)) + 22.2158;
+}
+
+float lt5538_to_dBm(float reading){
+    return 50.109 * reading - 86.318;
+}
+
 void readPowerDetectors(){
-    inputPowerReading = analogRead(INPUT_PD);
-    outputPowerReading = analogRead(FORWARD_PD);
-    reflectedPowerReading = analogRead(REFLECTED_PD);
+    inputPower = lt5538_to_dBm(analogRead(INPUT_PD));
+    outputPower = adl5519_to_dBm(analogRead(FORWARD_PD));
+    reflectedPower = adl5519_to_dBm(analogRead(REFLECTED_PD));
+
+    VSWR = vswr(dBm2mW(outputPower), dBm2mW(reflectedPower));
+}
+
+void setPowerStates(){
+    if(VSWR >= VSWR_MAX)
+        vswrState = true;
+    else vswrState = false;
+
+    if(inputPower >= INPUT_PWR_MAX)
+        inputState = true;
+    else inputState = false;
 }
 
 #endif
