@@ -18,10 +18,11 @@ bool inputState = false;
 
 /**
  * VSWR Status Code
- * 0 / False: VSWR Acceptable
- * 1 / True: VSWR Too High - trigger overdrive switch
+ * 0: VSWR Acceptable
+ * 1: VSWR Above Warning Threshold
+ * 2: VSWR Too High - trigger overdrive switch
 */
-bool vswrState = false;
+unsigned short vswrState = false;
 
 /**
  * @brief Converts given power in dBm to milliwatts.
@@ -45,26 +46,45 @@ float vswr(float forward, float reflected){
     return (1 + sqrt(reflected / forward)) / (1 - sqrt(reflected / forward));
 }
 
-float adl5519_to_dBm(float reading){
-    return (reading / (-0.0215)) + 22.2158;
+float lt5538_to_dBm(float reading){
+    #if DEBUG == 1
+        Serial.print("LT5538 Voltage Reading: ");
+        Serial.print(reading);
+        Serial.println (" V.");
+    #endif
+    return (reading - 1.7171) / 0.0209;
 }
 
-float lt5538_to_dBm(float reading){
-    return 50.109 * reading - 86.318;
+float adl5519_to_dBm(float reading){
+    #if DEBUG == 1
+        Serial.print("ADL5519 Voltage Reading: ");
+        Serial.print(reading);
+        Serial.println (" V.");
+    #endif
+    return (reading - 0.4598) / -0.0217;
 }
 
 void readPowerDetectors(){
-    inputPower = lt5538_to_dBm(analogRead(INPUT_PD));
-    outputPower = adl5519_to_dBm(analogRead(FORWARD_PD));
-    reflectedPower = adl5519_to_dBm(analogRead(REFLECTED_PD));
+    inputPower = lt5538_to_dBm(5.0 * (analogRead(INPUT_PD))/1023.0);
+    outputPower = adl5519_to_dBm(5.0 * (analogRead(FORWARD_PD))/1023.0);
+    reflectedPower = adl5519_to_dBm(5.0 * (analogRead(REFLECTED_PD))/1023.0);
 
     VSWR = vswr(dBm2mW(outputPower), dBm2mW(reflectedPower));
 }
 
 void setPowerStates(){
-    if(VSWR >= VSWR_MAX)
-        vswrState = true;
-    else vswrState = false;
+    if(VSWR >= VSWR_WARN){
+        if(vswrState == 2){
+            vswrState = 2;
+        }
+        else if(VSWR >= VSWR_MAX){
+            vswrState = 2;
+        }
+        else{
+            vswrState = 1;
+        }
+    }
+    else vswrState = 0;
 
     if(inputPower >= INPUT_PWR_MAX)
         inputState = true;

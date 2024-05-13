@@ -43,7 +43,6 @@ void readSensors(){
         Serial.println(outputPower);
         Serial.println(reflectedPower);
         Serial.println(VSWR);
-        delay(2000);
     #endif
 }
 
@@ -53,13 +52,14 @@ void setStates(){
 }
 
 void setOverdrive(){
-    if(thermalState > 1 || inputState || vswrState)
+    /*if(thermalState > 1 || inputState || vswrState)
         overdriveState = true;
     else overdriveState = false;
 
     if(overdriveState)
         digitalWrite(OVERDRIVE_P1, HIGH);
-    else digitalWrite(OVERDRIVE_P1, LOW);
+    else digitalWrite(OVERDRIVE_P1, LOW);*/
+    overdriveState = true;
 }
 
 #endif

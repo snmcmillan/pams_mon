@@ -53,7 +53,6 @@ void initMon(){
     monSerial.flush();
     #if DEBUG == 1
         Serial.println("Initial Handshake Performed!");
-        delay(1000);
     #endif
 }
 
@@ -63,17 +62,23 @@ void sendData(){
         Serial.println("Head Unit Wants Data!");
     #endif
     monSerial.print(temperature);
+    monSerial.print(',');
     monSerial.print(current);
+    monSerial.print(',');
     monSerial.print(inputPower);
+    monSerial.print(',');
     monSerial.print(outputPower);
+    monSerial.print(',');
     monSerial.print(VSWR);
+    monSerial.print(',');
     monSerial.print(thermalState);
+    monSerial.print(',');
     monSerial.print(inputState);
+    monSerial.print(',');
     monSerial.print(vswrState);
 
     #if DEBUG == 1
         Serial.println("Head Unit Read Data!");
-        delay(1000);
     #endif
     monSerial.flush();
 }

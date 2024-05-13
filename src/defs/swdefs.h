@@ -14,7 +14,7 @@
  * 
  * Setting this to 0 makes the program run normally, and read data from the sensors.
 */
-#define DEMO 1
+#define DEMO 0
 
 
 /**

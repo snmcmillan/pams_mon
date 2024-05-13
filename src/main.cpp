@@ -6,6 +6,7 @@
   #include <time.h>
 #endif
 void setup() {
+  pinMode(OVERDRIVE_P2, OUTPUT);
   digitalWrite(OVERDRIVE_P2, LOW);
   initSensors();
   initMon();
@@ -14,6 +15,7 @@ void setup() {
 void loop() {
   readSensors();
   setStates();
+  
   setOverdrive();
   sendData();
 }

@@ -62,6 +62,9 @@
  *      - ADL5519 : Dual Channel Power Detector used on the output for both forward and reflected power.
 */
 #define INPUT_PD A1
+
+#define INPUT_SCALE 360/157
+
 #define FORWARD_PD A2
 #define REFLECTED_PD A3
 
@@ -105,10 +108,12 @@
 #define TEMP_TIME_LIMIT 5 //Minutes
 #define TEMP_DELTA_MAX 1 //Degrees Celsius Per Minute
 
+#define THERMAL_RUNAWAY_COOLDOWN 5 //Minutes
 
 #define INPUT_PWR_MAX 10 //dBm
 
-#define VSWR_MAX 2.0
+#define VSWR_WARN 3.5
+#define VSWR_MAX 4.0
 
 
 #endif

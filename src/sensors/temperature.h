@@ -9,8 +9,8 @@ Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
 
 float temperature = 0, previousTemp = 0, deltaT = 0;
 bool tempWarn = false;
-unsigned long previousTempTimestamp = 0, currentTempTimeStamp = 0, tempWarnTimestamp = 0; //If we go above the warn threshold, get this time stamp.
-
+unsigned long previousTempTimestamp = 0, currentTempTimeStamp = 0, 
+            tempWarnTimestamp = 0, thermalRunawayTriggeredTimeStamp = 0;
 /**
  * Thermal Status Codes
  * 
@@ -38,9 +38,14 @@ bool thermalRunaway(){
             return false;                                    //Hypothetically speaking, this branch could trigger in a real runaway case, but that's almost impossible.
         }
         else{
+            if(thermalState == 4) 
+                thermalRunawayTriggeredTimeStamp = millis();
             return true;
+            
         }
     }
+    else if(thermalState == 4 && ((millis() - thermalRunawayTriggeredTimeStamp) < minutes2Milliseconds(THERMAL_RUNAWAY_COOLDOWN)))
+        return true;
     else return false;
 }
 
